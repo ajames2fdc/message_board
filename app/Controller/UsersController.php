@@ -1,6 +1,6 @@
 <?php
 
-App::uses('AppController', 'Controller');
+App::uses('UsersController', 'Controller');
 class UsersController extends AppController
 {
     public $hasOne = 'UserProfile';
@@ -26,21 +26,26 @@ class UsersController extends AppController
     public function login()
     {
         if ($this->request->is('post')) {
+
             if ($this->Auth->login()) {
                 // User successfully logged in
+                $userID = $this->Auth->user('user_id');
 
                 // Check if UserProfile exists
                 $userProfile = $this->User->UserProfile->find('first', array(
-                    'conditions' => array('UserProfile.user_id' => $this->Auth->user('id'))
+                    'conditions' => array('UserProfile.user_id' => $this->Auth->user('user_id'))
                 ));
 
                 // Create UserProfile if not exists
                 if (!$userProfile) {
-                    $this->Flash->set('User_id', ['key' => $this->Auth->user('id')]);
-                    return $this->redirect(array('controller' => 'user_profiles', 'action' => 'add'));
+                    // $this->Session->write('User_id', ['key' => $this->Auth->user('user_id')]);
+                    return $this->redirect(array('controller' => 'userProfiles', 'action' => 'add', $userID));
                 }
 
-                return $this->redirect($this->Auth->redirectUrl());
+
+                // Redirect to index when user is logged in and User Profile exists
+                // TODO change to index
+                return $this->redirect(array('controller' => 'userProfiles', 'action' => 'view', $userID));
             } else {
                 $this->Flash->error('Invalid username or password, try again');
             }
@@ -53,6 +58,7 @@ class UsersController extends AppController
 
     public function logout()
     {
-        return $this->redirect($this->Auth->logout());
+        $this->Auth->logout();
+        return $this->redirect(array('controller' => 'Users', 'action' => 'login'));
     }
 }

@@ -1,9 +1,12 @@
 <?php
 
-App::uses('AppModel', 'Model');
+App::uses('UserProfile', 'Model');
 
 class UserProfile extends AppModel
 {
+    public $virtualFields = array(
+        'full_name' => 'CONCAT(UserProfile.first_name, " ", UserProfile.last_name)'
+    );
     public $primaryKey = 'id';
     public $belongsTo = array(
         'User' => array(

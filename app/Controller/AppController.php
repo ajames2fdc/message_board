@@ -36,6 +36,7 @@ class AppController extends Controller
     public $components = array(
         'DebugKit.Toolbar',
         'Flash',
+        'Session',
         'Auth' => array(
             'loginRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
             'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
@@ -61,7 +62,6 @@ class AppController extends Controller
         $this->set('userName', $this->Auth->user('user_name'));
         $this->set('loggedIn', $loggedIn);
         $this->set('userData', $this->Auth->user());
-        $this->set('userProfile', $this->loadModel('UserProfile'));
         $this->Auth->allow(); // Allow public access to all actions by default
     }
 }

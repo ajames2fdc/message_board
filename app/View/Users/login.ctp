@@ -15,8 +15,11 @@
                     echo $this->Form->button('Login', ['class' => 'btn btn-primary btn-block mt-3']);
                     echo $this->Form->end();
                     ?>
-                    <div class="mt-3 text-center">
+                    <!-- <div class="mt-3 text-center">
                         <?php echo $this->Html->link('Forgot Password?', array('controller' => 'users', 'action' => 'forgotPassword')); ?>
+                    </div> -->
+                    <div class="mt-3 text-center">
+                        <?php echo $this->Html->link('No Account? Register here', array('controller' => 'users', 'action' => 'register')); ?>
                     </div>
                 </div>
             </div>

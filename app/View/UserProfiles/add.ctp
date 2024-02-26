@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body">
                     <?php
-                    echo $this->Form->create('UserProfile', ['class' => 'form', 'enctype' => 'multipart/form-data']);
+                    echo $this->Form->create('UserProfile', ['class' => 'form', 'enctype' => 'multipart/form-data'],);
                     echo $this->Form->input('first_name', ['label' => 'First Name', 'class' => 'form-control']);
                     echo $this->Form->input('last_name', ['label' => 'Last Name', 'class' => 'form-control']);
                     echo $this->Form->input('gender', ['label' => 'Gender', 'class' => 'form-control', 'options' => ['Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other']]); ?>

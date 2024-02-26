@@ -1,5 +1,5 @@
 <?php
-App::uses('Model', 'Model');
+App::uses('User', 'Model');
 
 class User extends Model
 {
