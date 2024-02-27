@@ -3,7 +3,10 @@ App::uses('User', 'Model');
 
 class User extends Model
 {
-    public $hasOne = 'UserProfile';
+    public $hasOne = array(
+        'UserProfile',
+    );
+
     public $primaryKey = 'user_id';
 
     public $validate = array(
@@ -56,6 +59,33 @@ class User extends Model
             )
         )
     );
+
+    public function changePassword($userId, $oldPassword, $newPassword, $confirmPassword)
+    {
+        $user = $this->findById($userId);
+
+        if ($user) {
+            return false;
+        }
+
+        // Check if old password matches
+        if ($this->Auth->password($oldPassword !== $user['User']['password'])) {
+            $this->Flash->set('Incorrect Password');
+            return false;
+        }
+
+        // Check if new password and confirm password match
+        if ($newPassword !== $confirmPassword) {
+            $this->Flash->set('Mismatched Password');
+            return false;
+        }
+
+        // Update the password
+        $this->User->id = $user['User']['user_id'];
+        // $this->User->saveField('password', $this->Auth->password($newPassword));
+
+        return true;
+    }
 
     public function validatePasswordConfirmation($data)
     {

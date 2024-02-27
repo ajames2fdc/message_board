@@ -1,4 +1,7 @@
 <!-- app/View/Home/index.ctp -->
+<?php
+?>
+
 
 <div class="container mt-5">
     <div class="row">
@@ -11,10 +14,20 @@
             // Add the "Send Direct Message" button
             echo $this->Html->link(
                 'Send Direct Message',
-                ['controller' => 'conversations', 'action' => 'newMessage'],
+                ['controller' => 'messages', 'action' => 'newMessage'],
                 ['class' => 'btn btn-primary btn-sm ml-2']
             );
+            echo $this->Html->link(
+                'Message List',
+                [
+                    'controller' => 'messages',
+                    'action' => 'messageList',
+                ],
+                ['class' => 'btn btn-primary btn-sm ml-2']
+            );
+
             ?>
+
         </div>
     </div>
 </div>

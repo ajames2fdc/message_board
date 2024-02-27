@@ -9,7 +9,9 @@ class UserProfilesController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        // Add any specific controller-wide configurations here
+
+        $this->loadModel('User');
+        $this->loadModel('UserProfile');
     }
 
     /**
@@ -34,11 +36,21 @@ class UserProfilesController extends AppController
             throw new NotFoundException('Invalid user');
         }
 
-        $this->loadModel('UserProfiles');
-
+        // Find the profile data
         $profileData = $this->UserProfile->find('first', array(
             'conditions' => array('UserProfile.user_id' => $id)
         ));
+
+        // Check if the profile picture file exists
+        $fileExists = $this->checkFileExists($profileData['UserProfile']['profile_picture']);
+
+        if (!$fileExists) {
+            $profileData['UserProfile']['file_path'] = $this->baseUrl('/uploads/default.png');
+            $profileData['UserProfile']['alt'] = 'default';
+        } else {
+            $profileData['UserProfile']['file_path'] = $this->baseUrl('/uploads/' . $profileData['UserProfile']['profile_picture']);
+            $profileData['UserProfile']['alt'] = $profileData['UserProfile']['profile_picture'];
+        }
 
         $this->set('profileData', $profileData);
     }
@@ -51,21 +63,32 @@ class UserProfilesController extends AppController
             throw new NotFoundException('Invalid user');
         }
 
-        $this->loadModel('User');
         if ($this->request->is('post')) {
             $this->UserProfile->create();
             $uploadedFile = $this->request->data['UserProfile']['profile_picture'];
-
             // File handling
             if (!empty($uploadedFile['name'])) {
+                $file = $this->request->data['UserProfile']['profile_picture'];
+
+                // Set the directory where uploaded files will be stored
+                $uploadDir = WWW_ROOT . 'uploads' . DS;
+
                 // Generate a unique filename for the uploaded file
                 $filename = md5(uniqid() . time()) . '.' . pathinfo($uploadedFile['name'], PATHINFO_EXTENSION);
 
-                // Move the file to the upload folder
-                move_uploaded_file($uploadedFile['name'], WWW_ROOT . 'uploads' . DS . $filename);
+                // Set the full path for saving
+                $uploadPath = $uploadDir . $filename;
 
-                // Save the filename to the database
-                $this->request->data['UserProfile']['profile_picture'] = $filename;
+                // Move the uploaded file to the specified directory
+                if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                    // Save the filename to the database
+                    $this->request->data['UserProfile']['profile_picture'] = $filename;
+                    $this->Flash->set('File uploaded successfully.');
+                } else {
+                    // Handle file upload error
+                    $this->Flash->set('Error uploading file. Please try again.');
+                    return $this->redirect(array('action' => 'add'));
+                };
             }
 
             $this->request->data['UserProfile']['user_id'] = $id;
@@ -76,7 +99,6 @@ class UserProfilesController extends AppController
             // Continue with saving the data
             if ($this->UserProfile->save($this->request->data)) {
                 $this->Flash->success(('The user profile has been created.'));
-                $this->loadModel('UserProfile');
                 $userProfile = $this->UserProfile->findById($id);
 
 
@@ -100,9 +122,6 @@ class UserProfilesController extends AppController
             throw new NotFoundException(__('Invalid user profile'));
         }
 
-        // Load the model
-        $this->loadModel('UserProfile');
-
         // Retrieve existing data so we can pre-populate the form
         $userProfile = $this->UserProfile->find('first', array(
             'conditions' => array('UserProfile.user_id' => $id)
@@ -122,11 +141,12 @@ class UserProfilesController extends AppController
             $this->UserProfile->id = $userProfile['UserProfile']['id'];
             $dataToSave = $this->request->data('UserProfile');
             $dataToSave['birthday'] = $this->request->data['birthday'];
+            debug($dataToSave);
 
             if ($this->UserProfile->save($dataToSave)) {
                 $this->Flash->success('User profile has been updated.');
 
-                return $this->redirect(array('controller' => 'userProfiles', 'action' => 'view', $id));
+                // return $this->redirect(array('controller' => 'userProfiles', 'action' => 'view', $id));
             } else {
                 $this->Flash->error('Unable to update user profile. Please, try again.');
                 debug($this->UserProfile->validationErrors);
@@ -135,5 +155,16 @@ class UserProfilesController extends AppController
             // $this->request->data = $this->UserProfile->read(null, $id);
             $this->request->data = $userProfile;
         }
+    }
+
+    private function checkFileExists($fileName)
+    {
+        $filePath = WWW_ROOT . 'uploads' . DS . $fileName;
+
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        return file_exists($filePath);
     }
 }

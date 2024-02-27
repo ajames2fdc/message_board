@@ -3,6 +3,8 @@ App::uses('Messages', 'Model');
 
 class Messages extends Model
 {
+    public $actsAs = array('Containable');
+
     public $validate = array(
         'conversation_id' => array(
             'rule' => 'numeric',
@@ -24,14 +26,16 @@ class Messages extends Model
     );
 
     public $belongsTo = array(
-        'Conversation',
         'Sender' => array(
             'className' => 'User',
-            'foreignKey' => 'sender_id'
+            'foreignKey' => 'sender_id',
+            'fields' => array('Sender.*', 'UserProfile.*'),
         ),
         'Receiver' => array(
             'className' => 'User',
-            'foreignKey' => 'receiver_id'
-        )
+            'foreignKey' => 'receiver_id',
+            'fields' => array('Receiver.*', 'UserProfile.*'),
+        ),
+        'Conversation',
     );
 }

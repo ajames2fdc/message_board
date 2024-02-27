@@ -3,6 +3,17 @@
 App::uses('AppController', 'Controller');
 class HomeController extends AppController
 {
+    // TODO for optimization
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+
+        // Load models
+        $this->loadModel('UserProfile');
+        $this->loadModel('Conversations');
+    }
+
+
     /**
      * Messageboard homepage controller
      *

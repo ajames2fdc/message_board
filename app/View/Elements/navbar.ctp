@@ -7,12 +7,18 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <?php if ($loggedIn) : ?>
-                <li class="nav-item">
+                <li class="nav-item ml-5">
                     <span class="navbar-text">
-                        Welcome, <?php echo $userName; ?>
+                        Welcome, <?php echo $this->Html->link($userName, array('controller' => 'userProfiles', 'action' => 'view', $userId)) ?>
+
                     </span>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item ml-5">
+                    <span class="navbar-text">
+                        <?php echo $this->Html->link('Change Password', array('controller' => 'users', 'action' => 'changePassword', $userId)) ?>
+                    </span>
+                </li>
+                <li class="nav-item ml-2">
                     <?= $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'), array('class' => 'nav-link')) ?>
                 </li>
             <?php else : ?>

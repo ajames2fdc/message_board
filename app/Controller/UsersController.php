@@ -36,9 +36,8 @@ class UsersController extends AppController
                     'conditions' => array('UserProfile.user_id' => $this->Auth->user('user_id'))
                 ));
 
-                // Create UserProfile if not exists
+                // Create UserProfile if does not exists
                 if (!$userProfile) {
-                    // $this->Session->write('User_id', ['key' => $this->Auth->user('user_id')]);
                     return $this->redirect(array('controller' => 'userProfiles', 'action' => 'add', $userID));
                 }
 
@@ -54,6 +53,24 @@ class UsersController extends AppController
 
     public function welcome()
     {
+    }
+
+    public function changePassword()
+    {
+        if ($this->request->is('post')) {
+
+            $userId = $this->Auth->user('user_id');
+            $oldPassword = $this->request->data['User']['old_password'];
+            $newPassword = $this->request->data['User']['new_password'];
+            $confirmPassword = $this->request->data['User']['confirm_password'];
+
+            if ($this->User->changePassword($userId, $oldPassword, $newPassword, $confirmPassword)) {
+                $this->Flash->set('Password changed successfully.', 'flash/success');
+                $this->redirect('/');
+            } else {
+                $this->Flash->set('Failed to change password. Please check your input.', 'flash/error');
+            }
+        }
     }
 
     public function logout()

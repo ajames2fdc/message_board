@@ -56,10 +56,31 @@ class AppController extends Controller
         return true;
     }
 
+    function baseUrl($path = '')
+    {
+        // Adjust the base URL as needed
+        $baseUrl = 'http://localhost/message-board/';
+
+        // Remove leading slash from the path to prevent double slashes
+        $path = ltrim($path, '/');
+
+        // Combine the base URL and the path
+        return $baseUrl . $path;
+    }
+
+    function setFullName($firstName, $lastName)
+    {
+        $formattedFirstName = ucfirst($firstName);
+        $formattedLastName = ucfirst($lastName);
+
+        return $formattedFirstName . " " . $formattedLastName;
+    }
+
     public function beforeFilter()
     {;
         $loggedIn = (bool)$this->Auth->user();
         $this->set('userName', $this->Auth->user('user_name'));
+        $this->set('userId', $this->Auth->user('user_id'));
         $this->set('loggedIn', $loggedIn);
         $this->set('userData', $this->Auth->user());
         $this->Auth->allow(); // Allow public access to all actions by default

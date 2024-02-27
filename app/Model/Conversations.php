@@ -3,15 +3,28 @@ App::uses('Conversations', 'Model');
 
 class Conversations extends Model
 {
-    public $belongsTo = array(
-        'User1' => array(
-            'className' => 'User',
-            'foreignKey' => 'user1_id'
+    public $validate = array(
+        'receiver_id' => array(
+            'rule' => 'numeric',
+            'message' => 'Please select a recipient'
         ),
-        'User2' => array(
+        'sender_id' => array(
+            'rule' => 'numeric',
+            'message' => 'Error user.'
+        ),
+    );
+
+
+    public $belongsTo = array(
+        'Sender' => array(
             'className' => 'User',
-            'foreignKey' => 'user2_id'
-        )
+            'foreignKey' => 'sender_id'
+        ),
+        'Receiver' => array(
+            'className' => 'User',
+            'foreignKey' => 'receiver_id'
+        ),
+        'Conversation'
     );
 
     public $hasMany = array(

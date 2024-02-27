@@ -7,7 +7,9 @@ class UserProfile extends AppModel
     public $virtualFields = array(
         'full_name' => 'CONCAT(UserProfile.first_name, " ", UserProfile.last_name)'
     );
+
     public $primaryKey = 'id';
+
     public $belongsTo = array(
         'User' => array(
             'className' => 'User',
@@ -71,6 +73,21 @@ class UserProfile extends AppModel
                 'rule' => array('maxLength', 255),
                 'message' => 'Profile picture URL must not exceed 255 characters',
             ),
+            'photo' => array(
+                'rule' => array('extension', array('jpg', 'jpeg', 'png', 'gif')),
+                'message' => 'Please upload only image files'
+            )
         ),
     );
+
+    // public $actsAs = array(
+    //     'Upload.Upload' => array(
+    //         'profile_picture' => array(
+    //             'path' => WWW_ROOT . 'uploads' . DS,
+    //             'fields' => array(
+    //                 'dir' => 'profile_picture',
+    //             ),
+    //         ),
+    //     )
+    // );
 }

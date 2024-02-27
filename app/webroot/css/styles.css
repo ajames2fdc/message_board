@@ -1,0 +1,16 @@
+ 
+.profile-picture-frame {
+    width: 150px; /* Adjust the width as needed */
+    height: 150px; /* Set a fixed height to make it a square */
+    overflow: hidden;
+    border-radius: 50%; /* Make it a circle, adjust for rounded corners if needed */
+    border: 2px solid #ddd; /* Add a border for styling */
+    margin: 0 auto; /* Center the frame */
+    margin-bottom: 20px; /* Add margin for spacing */
+}
+
+.profile-picture {
+    width: 100%;
+    height: auto;
+    display: block;
+}

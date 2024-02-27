@@ -1,5 +1,4 @@
 <?php
-// echo debug($profileData);
 ?>
 
 <div class="container mt-5">
@@ -10,9 +9,12 @@
                     <h3>User Profile</h3>
                 </div>
                 <div class="card-body">
+                    <div class="profile-picture-frame">
+                        <img class="profile-picture" id="profilePicturePreview" src='<?php echo $profileData['UserProfile']['file_path']; ?>' alt="<?php echo $profileData['UserProfile']['alt']; ?>">
+                    </div>
                     <div class="form-group">
                         <label for="Name">Name:</label>
-                        <p class="form-control-static"><?php echo h($profileData['UserProfile']['first_name'] . ' ' . $profileData['UserProfile']['last_name']); ?></p>
+                        <p class="form-control-static"><?php echo h($profileData['UserProfile']['full_name']); ?></p>
                     </div>
                     <div class="form-group">
                         <label for="email">Gender:</label>
@@ -30,11 +32,6 @@
                         <label for="full_name">Bio:</label>
                         <p class="form-control-static"><?php echo h($profileData['UserProfile']['bio']); ?></p>
                     </div>
-                    <div class="form-group">
-                        <label for="full_name">Profile Picture</label>
-                        <p class="form-control-static"><?php echo h($profileData['UserProfile']['profile_picture']); ?></p>
-                    </div>
-                    <!-- Add more profile fields as needed -->
 
                     <div class="text-center mt-3">
                         <?php echo $this->Html->link('Edit Profile', array('controller' => 'userProfiles', 'action' => 'edit', $profileData['UserProfile']['user_id']), array('class' => 'btn btn-primary')); ?>
