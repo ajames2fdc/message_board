@@ -1,0 +1,29 @@
+.custom-flash-error,  .error-message{
+    color: red;
+    font-size: 14px; /* Adjust the font size as needed */
+    animation: fadeInOut 2s ease-in-out; /* Example animation, adjust duration and easing as needed */
+}
+
+.custom-flash-success {
+    color: green;
+    font-size: 16px; /* Adjust the font size as needed */
+    animation: fadeInOut 3s ease-in-out; /* Example animation, adjust duration and easing as needed */
+}
+
+/* Define styles for the disabled link */
+.disabled {
+    color: #999; /* Change the color to a muted or grayed-out color */
+    pointer-events: none; /* Disable pointer events to make the link unclickable */
+    text-decoration: none; /* Remove underline or other decorations */
+    cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+}
+
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}

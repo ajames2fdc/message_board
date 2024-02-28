@@ -38,11 +38,21 @@ class AppController extends Controller
         'Flash',
         'Session',
         'Auth' => array(
-            'loginRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
-            'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
+            'loginAction' => array(
+                'controller' => 'users',
+                'action' => 'login'
+            ),
+            'loginRedirect' => array(
+                'controller' => 'userProfiles',
+                'action' => 'add'
+            ),
+            'logoutRedirect' => '/',
             'authenticate' => array(
                 'Form' => array(
-                    'fields' => array('username' => 'user_name', 'password' => 'password'),
+                    'fields' => array(
+                        'username' => 'user_name',
+                        'password' => 'password'
+                    ),
                     'passwordHasher' => 'Blowfish',
                 )
             ),
@@ -54,6 +64,17 @@ class AppController extends Controller
     public function isAuthorized($user)
     {
         return true;
+    }
+
+    function checkFileExists($fileName)
+    {
+        $filePath = WWW_ROOT . 'uploads' . DS . $fileName;
+
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        return file_exists($filePath);
     }
 
     function baseUrl($path = '')
@@ -83,6 +104,6 @@ class AppController extends Controller
         $this->set('userId', $this->Auth->user('user_id'));
         $this->set('loggedIn', $loggedIn);
         $this->set('userData', $this->Auth->user());
-        $this->Auth->allow(); // Allow public access to all actions by default
+        $this->Auth->allow('login');
     }
 }

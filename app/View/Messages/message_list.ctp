@@ -7,7 +7,7 @@
     <ul class="list-group">
         <?php foreach ($messagesData as $message) : ?>
             <li class="list-group-item">
-                <strong>From:</strong> <?= h($message['SenderProfile']['full_name']) ?>
+                <strong>From:</strong> <?php echo $this->Html->link($message['SenderProfile']['full_name'], array('controller' => 'messages', 'action' => 'conversation', $userId)) ?>
                 <br>
                 <strong>To:</strong> <?= h($message['ReceiverProfile']['full_name']) ?>
                 <br>

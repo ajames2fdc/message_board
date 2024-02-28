@@ -1,5 +1,6 @@
 <?php
 App::uses('User', 'Model');
+App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 
 class User extends Model
 {
@@ -57,35 +58,38 @@ class User extends Model
                 'rule' => array('validatePasswordConfirmation'),
                 'message' => 'Passwords do not match'
             )
-        )
+        ),
+        'old_password' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => 'Password is required'
+            ),
+            'length' => array(
+                'rule' => array('between', 6, 255),
+                'message' => 'Password must be at least 6 characters long'
+            ),
+
+        ),
+        'new_password' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => 'Password is required'
+            ),
+            'minLength' => array(
+                'rule' => array('between', 6, 255),
+                'message' => 'Password must be at least 6 characters long.',
+                'allowEmpty' => false,
+                'on' => 'update',
+            ),
+        ),
+        'confirm_password' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => 'Password is required'
+            ),
+
+        ),
     );
-
-    public function changePassword($userId, $oldPassword, $newPassword, $confirmPassword)
-    {
-        $user = $this->findById($userId);
-
-        if ($user) {
-            return false;
-        }
-
-        // Check if old password matches
-        if ($this->Auth->password($oldPassword !== $user['User']['password'])) {
-            $this->Flash->set('Incorrect Password');
-            return false;
-        }
-
-        // Check if new password and confirm password match
-        if ($newPassword !== $confirmPassword) {
-            $this->Flash->set('Mismatched Password');
-            return false;
-        }
-
-        // Update the password
-        $this->User->id = $user['User']['user_id'];
-        // $this->User->saveField('password', $this->Auth->password($newPassword));
-
-        return true;
-    }
 
     public function validatePasswordConfirmation($data)
     {
@@ -99,13 +103,14 @@ class User extends Model
 
             /**Start of Encryption*/
             $plainPassword = $this->data[$this->alias]['password'];
-
+            debug($plainPassword);
             // Generate a Blowfish salt
             $blowfishSalt = Security::hash(Security::randomBytes(22), 'blowfish');
 
             // Hash the password with the salt
             $hashedPassword = Security::hash($plainPassword, 'blowfish', $blowfishSalt);
             /** End of encryption */
+            debug($hashedPassword);
 
             $this->data[$this->alias]['password'] = $hashedPassword;
         }

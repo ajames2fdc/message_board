@@ -24,22 +24,20 @@
                     echo $this->Form->button('Send Message', ['class' => 'btn btn-primary submit-button btn-block mt-3']);
                     echo $this->Form->end();
                     ?>
-
-                    <!-- Include Select2 initialization script -->
-                    <script>
-                        $(document).ready(function() {
-                            // Disable submit button initially
-                            $('.submit-button').prop('disabled', true);
-                            // Check the value of the recipient input
-                            $('.select2').on('change', function() {
-                                if ($(this).val()) {
-                                    $('.submit-button').prop('disabled', false);
-                                }
-                            })
-                        });
-                    </script>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        // Disable submit button initially
+        $('.submit-button').prop('disabled', true);
+        // Check the value of the recipient input
+        $('.select2').on('change', function() {
+            if ($(this).val()) {
+                $('.submit-button').prop('disabled', false);
+            }
+        })
+    });
+</script>

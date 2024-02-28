@@ -6,10 +6,6 @@ class Messages extends Model
     public $actsAs = array('Containable');
 
     public $validate = array(
-        'conversation_id' => array(
-            'rule' => 'numeric',
-            'message' => 'Please enter a valid conversation ID.'
-        ),
         'receiver_id' => array(
             'rule' => 'numeric',
             'message' => 'Please enter a valid receiver ID.'
@@ -36,6 +32,5 @@ class Messages extends Model
             'foreignKey' => 'receiver_id',
             'fields' => array('Receiver.*', 'UserProfile.*'),
         ),
-        'Conversation',
     );
 }

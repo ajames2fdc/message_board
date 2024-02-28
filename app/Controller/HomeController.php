@@ -7,10 +7,8 @@ class HomeController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-
         // Load models
         $this->loadModel('UserProfile');
-        $this->loadModel('Conversations');
     }
 
 
@@ -21,8 +19,9 @@ class HomeController extends AppController
      * @throws Some_Exception_Class description of exception
      * @return Some_Return_Value
      */
-    public function index()
+    public function index($id = null)
     {
-        $this->set('loggedInUserId', $this->Auth->user('user_id'));
+        // $this->set('loggedInUserId', $this->Auth->user('user_id'));
+        $this->set('loggedInUserId', $id);
     }
 }

@@ -22,11 +22,13 @@
 	echo $this->fetch('css');
 	echo $this->fetch('script');
 	echo $this->Html->css('styles');
+	echo $this->Html->css('flash');
+	echo $this->Html->css('messages');
 	?>
 </head>
 
 <body>
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<?= $this->element('navbar', array('loggedIn' => $loggedIn)) ?>
 
 	<div class="container mt-3">

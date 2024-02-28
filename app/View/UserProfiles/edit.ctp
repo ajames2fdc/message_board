@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
                     <div class="profile-picture-frame">
-                        <img class="profile-picture" id="profilePicturePreview" src="#" alt="">
+                        <img class="profile-picture" id="profilePicturePreview" src='<?php echo $userProfile['file_path']; ?>' alt="<?php echo $userProfile['alt']; ?>">
                     </div>
                     <?php
                     echo $this->Form->create('UserProfile', ['class' => 'form', 'enctype' => 'multipart/form-data']);
@@ -44,10 +44,14 @@
                         'label' => 'Bio',
                         'class' => 'form-control', 'rows' => '3',
                     ));
-                    //TODO add file handling
-                    echo $this->Form->input('profile_picture', ['type' => 'file', 'label' => 'Profile Picture',]);
+                    echo $this->Form->input('profile_picture', [
+                        'type' => 'file',
+                        'label' => 'Profile Picture',
+                    ]);
 
                     echo $this->Form->button('Save', ['class' => 'btn btn-primary btn-block mt-3']);
+                    echo $this->Flash->render('success');
+                    echo $this->Flash->render('error');
                     echo $this->Form->end();
                     ?>
                     <!-- Display the selected image inside a square box -->

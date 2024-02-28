@@ -30,10 +30,13 @@
                         'type' => 'file',
                         'label' => 'Profile Picture',
                         'class' => 'form-control-file',
-                        'id' => 'profilePictureInput'
+                        'id' => 'profilePictureInput',
+                        'required' => 'false'
                     ]);
 
                     echo $this->Form->button('Save', ['class' => 'btn btn-primary btn-block mt-3']);
+                    echo $this->Flash->render('success');
+                    echo $this->Flash->render('error');
                     echo $this->Form->end();
                     ?>
                 </div>

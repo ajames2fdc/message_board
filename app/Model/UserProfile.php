@@ -69,25 +69,16 @@ class UserProfile extends AppModel
             ),
         ),
         'profile_picture' => array(
-            'maxLength' => array(
-                'rule' => array('maxLength', 255),
-                'message' => 'Profile picture URL must not exceed 255 characters',
+            'uploadError' => array(
+                'rule' => 'uploadError',
+                'message' => 'Error uploading file',
+                'allowEmpty' => true,
             ),
-            'photo' => array(
+            'extension' => array(
                 'rule' => array('extension', array('jpg', 'jpeg', 'png', 'gif')),
-                'message' => 'Please upload only image files'
-            )
+                'message' => 'Please upload only image files',
+                'allowEmpty' => true,
+            ),
         ),
     );
-
-    // public $actsAs = array(
-    //     'Upload.Upload' => array(
-    //         'profile_picture' => array(
-    //             'path' => WWW_ROOT . 'uploads' . DS,
-    //             'fields' => array(
-    //                 'dir' => 'profile_picture',
-    //             ),
-    //         ),
-    //     )
-    // );
 }
