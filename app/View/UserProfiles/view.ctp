@@ -1,4 +1,7 @@
 <?php
+// echo debug($profileData);
+$isYourAction = $profileData['UserProfile']['user_id'] !== $userId;
+$linkClass = $isYourAction ? 'disabled' : '';
 ?>
 
 <div class="container mt-5">
@@ -33,8 +36,8 @@
                         <p class="form-control-static"><?php echo h($profileData['UserProfile']['bio']); ?></p>
                     </div>
 
-                    <div class="text-center mt-3">
-                        <?php echo $this->Html->link('Edit Profile', array('controller' => 'userProfiles', 'action' => 'edit', $profileData['UserProfile']['user_id']), array('class' => 'btn btn-primary')); ?>
+                    <div class="text-center mt-3 <?php  ?>">
+                        <?php echo $this->Html->link('Edit Profile', array('controller' => 'userProfiles', 'action' => 'edit', $profileData['UserProfile']['user_id']), array('class' => 'btn btn-primary' . ($linkClass ? ' ' . $linkClass : ''))); ?>
                     </div>
                 </div>
             </div>

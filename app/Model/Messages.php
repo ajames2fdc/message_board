@@ -3,7 +3,6 @@ App::uses('Messages', 'Model');
 
 class Messages extends Model
 {
-    public $actsAs = array('Containable');
 
     public $validate = array(
         'receiver_id' => array(

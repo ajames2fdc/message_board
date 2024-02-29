@@ -16,28 +16,25 @@
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
 
-	<!-- Other head elements -->
-
+	<!-- Custom Css -->
 	<?php
 	echo $this->fetch('css');
 	echo $this->fetch('script');
 	echo $this->Html->css('styles');
 	echo $this->Html->css('flash');
-	echo $this->Html->css('messages');
+	echo $this->Html->css('conversations');
 	?>
 </head>
 
 <body>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
 	<?= $this->element('navbar', array('loggedIn' => $loggedIn)) ?>
 
 	<div class="container mt-3">
 		<?= $this->Flash->render() ?>
 		<?= $this->fetch('content') ?>
 	</div>
-
-	<?php echo $this->element('sql_dump'); ?>
-
 </body>
 
 </html>

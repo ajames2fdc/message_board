@@ -50,7 +50,7 @@ class AppController extends Controller
             'authenticate' => array(
                 'Form' => array(
                     'fields' => array(
-                        'username' => 'user_name',
+                        'username' => 'email',
                         'password' => 'password'
                     ),
                     'passwordHasher' => 'Blowfish',

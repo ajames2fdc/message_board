@@ -18,7 +18,7 @@
                 ['class' => 'btn btn-primary btn-sm ml-2']
             );
             echo $this->Html->link(
-                'Message List',
+                'Message Details',
                 [
                     'controller' => 'messages',
                     'action' => 'messageList',

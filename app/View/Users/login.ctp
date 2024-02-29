@@ -10,7 +10,8 @@
                 <div class="card-body">
                     <?php
                     echo $this->Form->create('User', ['class' => 'form']);
-                    echo $this->Form->input('user_name', ['class' => 'form-control', 'label' => 'Username']);
+                    // echo $this->Form->input('user_name', ['class' => 'form-control', 'label' => 'Username']);
+                    echo $this->Form->input('email', ['class' => 'form-control', 'label' => 'Email', 'type' => 'email']);
                     echo $this->Form->input('password', ['class' => 'form-control', 'label' => 'Password']);
                     echo $this->Form->button('Login', ['class' => 'btn btn-primary btn-block mt-3']);
                     echo $this->Form->end();

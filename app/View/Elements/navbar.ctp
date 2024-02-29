@@ -2,7 +2,6 @@
 $currentAction = $this->request->params['action'];
 $isYourAction = $currentAction === 'add';
 
-// Add a class to the link based on the current action
 $linkClass = $isYourAction ? 'disabled' : '';
 ?>
 

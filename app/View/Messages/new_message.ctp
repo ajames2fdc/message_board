@@ -31,13 +31,6 @@
 </div>
 <script>
     $(document).ready(function() {
-        // Disable submit button initially
-        $('.submit-button').prop('disabled', true);
-        // Check the value of the recipient input
-        $('.select2').on('change', function() {
-            if ($(this).val()) {
-                $('.submit-button').prop('disabled', false);
-            }
-        })
+        $('.select2').select2();
     });
 </script>
