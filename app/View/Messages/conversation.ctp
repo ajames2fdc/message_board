@@ -1,5 +1,4 @@
 <?php
-echo debug($receiverData);
 ?>
 
 <div class="container mt-4">
