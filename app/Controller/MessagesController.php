@@ -19,7 +19,6 @@ class MessagesController extends AppController
     public function conversation($id = null)
     {
         $userId = $this->viewVars['userId'];
-
         $messagesData = $this->Message->find('all', array(
             'conditions' => array(
                 'OR' => array(
@@ -87,6 +86,47 @@ class MessagesController extends AppController
         }
     }
 
+
+    // TODO for ajax message
+    public function ajaxMessage()
+    {
+        $this->autoRender = false; // Disable view rendering
+        $userId = $this->viewVars['userId'];
+        $this->request->data('userId', $userId);
+        if ($this->request->is('post') && $this->request->is('ajax')) {
+
+            // Transform the data
+            $messageToSave = $this->request->data;
+            $messageToSave['Message']['sender_id'] = $userId;
+            $messageToSave['Message']['receiver_id'] = $id;
+
+            // Save the message to the database
+            if ($this->Message->save($messageToSave)) {
+                $receiverId = $messageToSave['Message']['receiver_id'];
+
+                // Fetch updated messages
+                $updatedMessagesData = $this->Message->find('all', array(
+                    'conditions' => array(
+                        'OR' => array(
+                            array('sender_id' => $userId, 'receiver_id' => $receiverId),
+                            array('sender_id' => $receiverId, 'receiver_id' => $userId),
+                        ),
+                    ),
+                ));
+
+                // Set the updated messages data for the view
+                $this->set(compact('updatedMessagesData'));
+
+                // Render the updated messages as a response
+                $this->render('/Elements/ajax/updated_messages');
+            } else {
+                // Handle validation errors
+                $this->set('errors', $this->Message->validationErrors);
+                $this->render('/Elements/ajax/ajax_errors');
+            }
+        }
+    }
+
     /**
      * Send new message
      *
@@ -116,7 +156,6 @@ class MessagesController extends AppController
             // Save the message to the database
             if ($this->Message->save($messageToSave)) {
                 $receiverId = $messageToSave['Message']['receiver_id'];
-                debug($messageToSave);
                 // Retrieve the message ID
                 return $this->redirect(array('controller' => 'messages', 'action' => 'conversation', $receiverId));
             } else {
@@ -125,7 +164,7 @@ class MessagesController extends AppController
         }
     }
 
-    public function messageList()
+    public function messageList($id = null)
     {
         $userId = $this->viewVars['userId'];
         $distinctUsersQuery = $this->Message->find('all', array(
@@ -145,14 +184,36 @@ class MessagesController extends AppController
             'conditions' => array('UserProfile.user_id' => $distinctUsers),
         ));
 
-        $messagesData = $this->Message->find('all', array(
-            'conditions' => array(
-                'OR' => array(
-                    'sender_id' => $userId,
-                    'receiver_id IN' => $distinctUsers,
+        // Set Id to be used
+        if ($id) {
+            // If user is selected
+            $setId = $id;
+        } else {
+            // If no user is selected -> check if there are conversations existing and set the first one as default
+            if ($distinctUsers) {
+                $setId = $distinctUsers[0];
+            } else {
+                $setId = 0;
+            }
+        }
+        // Only query messages if there are conversations
+        if ($setId) {
+            $messagesData = $this->Message->find('all', array(
+                'conditions' => array(
+                    'OR' => array(
+                        array('sender_id' => $userId, 'receiver_id' => $setId),
+                        array('sender_id' => $setId, 'receiver_id' => $userId),
+                    ),
                 ),
-            ),
-        ));
+            ));
+            $selectedUserData = $this->UserProfile->find('first', array(
+                'conditions' => array('UserProfile.user_id' => $setId),
+            ));
+        } else {
+            $messagesData = null;
+            $selectedUserData = null;
+        }
+
         // // File Handling
         foreach ($userData as $key => $value) {
             $fileExists = $this->checkFileExists($value['UserProfile']['profile_picture']);
@@ -165,34 +226,47 @@ class MessagesController extends AppController
                 $userData[$key]['UserProfile']['alt'] = $value['UserProfile']['profile_picture'];
             }
         }
+        $this->set('setId', $setId);
         $this->set('messagesData', $messagesData);
+        $this->set('selectedUserData', $selectedUserData);
         $this->set(compact('userData'));
     }
 
-    public function deleteMessages($id = null)
+    public function deleteMessages()
     {
         $this->autoRender = false;
-        // $userId = $this->viewVars['userId'];
-        // $receiverId = $id;
-        // if ($this->request->is('ajax')) {
-        //     $messagesData = $this->Message->find('all', array(
-        //         'conditions' => array(
-        //             'OR' => array(
-        //                 array('sender_id' => $userId, 'receiver_id' => $id),
-        //                 array('sender_id' => $id, 'receiver_id' => $userId),
-        //             ),
-        //         ),
-        //     ));
-        //     $this->autoRender = false;
-        //     $this->response->type('json');
-        //     if ($messagesData) {
-        //         $this->Message->deleteAll($messagesData);
-        //         echo json_encode(['success' => true]);
-        //     } else {
-        //         echo json_encode(['fail' => false]);
-        //     }
-        //     $this->response->type('json');
-        //     echo json_encode(['debug' => 'Controller is reached!']);
-        // }
+        $userId = $this->viewVars['userId'];
+
+        if ($this->request->is('ajax')) {
+            $receiverId = $this->request->data['receiverId'];
+
+            $messagesData = $this->Message->find('all', array(
+                'conditions' => array(
+                    'OR' => array(
+                        array('sender_id' => $userId, 'receiver_id' => $receiverId),
+                        array('sender_id' => $receiverId, 'receiver_id' => $userId),
+                    ),
+                ),
+            ));
+            if ($messagesData) {
+                $conditions = array(
+                    'OR' => array(
+                        array('sender_id' => $userId, 'receiver_id' => $receiverId),
+                        array('sender_id' => $receiverId, 'receiver_id' => $userId),
+                    ),
+                );
+
+                $this->Message->deleteAll($conditions);
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['fail' => false]);
+            }
+        }
+    }
+
+    function test()
+    {
+        $this->autoRender = false;
+        echo 'test';
     }
 }

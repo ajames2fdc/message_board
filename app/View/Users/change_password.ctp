@@ -19,8 +19,10 @@
                     echo $this->Flash->render('success');
                     echo $this->Form->end();
                     ?>
+                    <div class="mt-3 text-center">
+                        <?php echo $this->Html->link('Change Email?', array('controller' => 'users', 'action' => 'changeEmail')); ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

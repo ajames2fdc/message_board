@@ -87,7 +87,36 @@ class User extends Model
                 'rule' => 'notBlank',
                 'message' => 'Password is required'
             ),
-
+        ),
+        'old_email' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => 'Email is required'
+            ),
+            'validEmail' => array(
+                'rule' => 'email',
+                'message' => 'Please enter a valid email address'
+            )
+        ),
+        'new_email' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => 'Email is required'
+            ),
+            'validEmail' => array(
+                'rule' => 'email',
+                'message' => 'Please enter a valid email address'
+            )
+        ),
+        'confirm_email' => array(
+            'required' => array(
+                'rule' => 'notBlank',
+                'message' => 'Email is required'
+            ),
+            'validEmail' => array(
+                'rule' => 'email',
+                'message' => 'Please enter a valid email address'
+            )
         ),
     );
 
@@ -103,14 +132,12 @@ class User extends Model
 
             /**Start of Encryption*/
             $plainPassword = $this->data[$this->alias]['password'];
-            debug($plainPassword);
             // Generate a Blowfish salt
             $blowfishSalt = Security::hash(Security::randomBytes(22), 'blowfish');
 
             // Hash the password with the salt
             $hashedPassword = Security::hash($plainPassword, 'blowfish', $blowfishSalt);
             /** End of encryption */
-            debug($hashedPassword);
 
             $this->data[$this->alias]['password'] = $hashedPassword;
         }

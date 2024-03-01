@@ -21,6 +21,10 @@
     text-align: right;
   }
 
+   .receiver-message {
+    background-color: forestgreen;
+  }
+
   .user-info {
     display: flex; /* Use flexbox to align items */
     align-items: center; /* Align items vertically */
